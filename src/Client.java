@@ -138,4 +138,15 @@ public class Client extends Thread {
     {
         return !socket.isClosed();
     }
+    public void send(String message)
+    {
+        try {
+            byte[] tosend = message.getBytes("UTF-8");
+            dout.write(tosend);
+        }
+        catch (Exception e)
+        {
+            ;
+        }
+    }
 }

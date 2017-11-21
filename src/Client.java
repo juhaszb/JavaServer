@@ -41,7 +41,7 @@ public class Client extends Thread {
 
                 }
                 else {
-                    System.out.println(br.readLine());
+                    System.out.println(line);
                 }
 
             }

@@ -91,11 +91,6 @@ public class Graph extends Thread{
         };
         updater.start();
 
-
-
-
-
-
     }
     private void Register(JFrame frame)
     {

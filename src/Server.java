@@ -88,7 +88,7 @@ public class Server extends Thread{
                 while (true) {
                     sslSocket = (SSLSocket) sslServerSocket.accept();
                     sslSocket.setEnabledCipherSuites(sslSocket.getSupportedCipherSuites());
-                    Client c = new Client(sslSocket);
+                    Client c = new Client(sslSocket,this);
                     c.start();
                     clients.add(c);
                     for(int i = 0;i<clients.size();i++)

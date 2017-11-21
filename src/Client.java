@@ -12,11 +12,13 @@ public class Client extends Thread {
     protected InputStream input = null;
     protected BufferedReader br = null;
     protected DataOutputStream dout = null;
+    protected Server s;
     private volatile boolean stopsignal;
-    public Client(SSLSocket clientsocket)
+    public Client(SSLSocket clientsocket,Server s)
     {
         socket = clientsocket;
         stopsignal = false;
+        this.s = s ;
     }
     public void run()
     {
@@ -32,12 +34,20 @@ public class Client extends Thread {
             {
                 line = br.readLine();
                 split = line.split("\t");
+                Message m;
                 if(!loggedin)
                 {
                     if(split[0].equals("login")) {
                         loggedin = tryLogin(split[1], split[2]);
                         System.out.println(split[1] + " "+ split[2]);
                     }
+
+                }
+                else if(split[0].equals("msg") && split[1].equals("string"))
+                {
+                    m = new SimpleString(split[3],split[2],username,s);
+                    m.decode();
+                    System.out.println(line);
 
                 }
                 else {

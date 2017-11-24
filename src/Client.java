@@ -26,7 +26,7 @@ public class Client extends Thread {
         try
         {
             input = socket.getInputStream();
-            br = new BufferedReader(new InputStreamReader(input));
+            br = new BufferedReader(new InputStreamReader(input,"UTF-8"));
             dout = new DataOutputStream(socket.getOutputStream());
             String line ;
             String[] split ;

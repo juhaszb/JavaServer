@@ -3,6 +3,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 
 public class Client extends Thread {
     protected SSLSocket socket;
@@ -88,6 +89,31 @@ public class Client extends Thread {
                     byte[] k = ok.getBytes("UTF-8");
                     dout.write(k);
                     this.username = username;
+                    File f = new File(username);
+                    if(f.exists())
+                    {
+                        System.out.println("it exists");
+                        try{
+                            FileInputStream fi = new FileInputStream(username);
+                            ObjectInputStream oi = new ObjectInputStream(fi);
+                            ArrayList<MessageContainer> messages = new ArrayList<>();
+                            messages =(ArrayList<MessageContainer>)oi.readObject();
+                            System.out.println(messages.size());
+                            for(MessageContainer mc : messages)
+                            {
+                                System.out.println("It should send");
+                                SimpleString si = new SimpleString(mc,s);
+                                si.decode();
+                            }
+                            oi.close();
+                            f.delete();
+                        }
+                        catch (Exception e)
+                        {
+                            System.out.println("Still exception");
+                            System.out.println(e.getCause());
+                        }
+                    }
                     return true;
                 }
                 else if (split[1].equals(username) && !split[2].equals(hash)) {

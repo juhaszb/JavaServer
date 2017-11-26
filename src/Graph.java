@@ -70,7 +70,9 @@ public class Graph extends Thread{
                     if((servers.size()-1 )>= 0) {
                         Vector<Client> cl = servers.elementAt(servers.size()-1).getClients();
                             for (int i = 0; i <cl.size(); i++) {
-                                if((String)model.getElementAt(i) !=cl.elementAt(i).getUsername() )
+                                if(i>=model.size())
+                                    model.add(i,cl.elementAt(i).getUsername());
+                                else if((String)model.getElementAt(i) !=cl.elementAt(i).getUsername() )
                                 {model.setElementAt(cl.elementAt(i).getUsername(),i);
                                 list.setModel(model);
                                 frame.add(pane);// replace thing if modified

@@ -22,6 +22,7 @@ public class Server extends Thread{
     Socket socket = null;
     private int port ;
     private static Userfactory uf;
+    private boolean stopsignal = false;
     public Server(int port,String locationofuserfactory)
     {
         this.port = port;
@@ -85,7 +86,7 @@ public class Server extends Thread{
                 sslServerSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
                 sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(port);
 
-                while (true) {
+                while (!stopsignal) {
                     sslSocket = (SSLSocket) sslServerSocket.accept();
                     sslSocket.setEnabledCipherSuites(sslSocket.getSupportedCipherSuites());
                     Client c = new Client(sslSocket,this);
@@ -124,6 +125,10 @@ public class Server extends Thread{
     public Vector<Client> getClients()
     {
         return clients;
+    }
+    public void stopit()
+    {
+        stopsignal = false;
     }
 
 }

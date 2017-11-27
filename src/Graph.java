@@ -10,6 +10,11 @@ public class Graph extends Thread{
     private DefaultListModel model = new DefaultListModel();
     private JList list = new JList();
 
+    public Graph(Server s)
+    {
+        servers.add(s);
+    }
+
     @Override
     public void run() {
         Border b = new Border();
@@ -41,19 +46,26 @@ public class Graph extends Thread{
         startszerver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                    Server s = new Server(1250,"teszt.txt");
-                    servers.add(s);
-                    s.setStart();
-                    s.start();
+
+                    servers.elementAt(0).setStart();
+                    servers.elementAt(0).start();
 
 
 
             }
         });
+        JMenuItem stopszerver = new JMenuItem("stop szerver");
+        stopszerver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                servers.elementAt(0).stopit();
+            }
+        });
         New.add(NewUser);
         New.add(NewUserFile);
         menu.add(startszerver);
-        model.addElement("sajt");
+        menu.add(stopszerver);
+       // model.addElement("sajt");
         list.setModel(model);
         JScrollPane pane = new JScrollPane(list);
         frame.add(pane, BorderLayout.CENTER);

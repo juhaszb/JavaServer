@@ -5,7 +5,7 @@ public class Main {
     {
         boolean start = false;
         Server s = new Server(1520,"teszt.txt");
-        Graph g = new Graph();
+        Graph g = new Graph(s);
         g.start();
 
 

@@ -14,15 +14,45 @@ import com.sun.net.ssl.internal.ssl.Provider;
 import javafx.scene.paint.Stop;
 
 public class Server extends Thread {
-    SSLServerSocketFactory sslServerSocketFactory;
-    SSLServerSocket sslServerSocket;
-    SSLSocket sslSocket;
-    Vector<Client> clients = new Vector<>();
+    /**
+     * Socket Factory
+     */
+    private SSLServerSocketFactory sslServerSocketFactory;
+    /**
+     * server socket
+     */
+    private SSLServerSocket sslServerSocket;
+    /**
+     * SSL socket
+     */
+    private SSLSocket sslSocket;
+    /**
+     * kliensek
+     */
+    private Vector<Client> clients = new Vector<>();
+    /**
+     * készen áll -e
+     */
     private boolean ready;
+    /**
+     * portszám
+     */
     private int port;
+    /**
+     * Usereket előállító
+     */
     private static Userfactory uf;
+    /**
+     * megállítójel.
+     */
     private volatile boolean stopsignal = false;
 
+    /**Konstruktor
+     * @param port
+     * portszám
+     * @param locationofuserfactory
+     * A userfactory fájljának helye
+     */
     public Server(int port, String locationofuserfactory) {
         this.port = port;
         Security.addProvider(new Provider());
@@ -35,14 +65,24 @@ public class Server extends Thread {
 
     }
 
+    /**
+     * készenállítja a szervert.
+     */
     public void setStart() {
         ready = true;
     }
 
+    /**Készen áll e a szerver
+     * @return
+     * Készen áll-e.
+     */
     public boolean startready() {
         return ready;
     }
 
+    /**
+     * Szál.
+     */
     public void run() {
         if (ready && !stopsignal) {
             try {
@@ -102,33 +142,53 @@ public class Server extends Thread {
         }
     }
 
+    /**User factory megváltoztatása
+     * @param changeto
+     * mire
+     */
     public void changefactory(String changeto) {
         uf.changelocation(changeto);
     }
 
+    /**Userfactorit visszaadja
+     * @return
+     * Userfactory
+     */
     public static Userfactory getuserfactory() {
         return uf;
     }
 
+    /**getter
+     * @return
+     * Visszaadja a userfactory locationját.
+     */
     public static String getuserfactorylocation() {
         return uf.getlocation();
     }
 
+    /**getter
+     * @return
+     * viszaadja a klienseket.
+     */
     public Vector<Client> getClients() {
         return clients;
     }
 
+    /**eltávolít klienst.
+     * @param index
+     * az adott indexű elemet
+     */
     public void removefromclients(int index)
     {
         //clients.elementAt(index).closeall();
         clients.remove(index);
     }
 
-    public void setClients(Vector<Client> clients)
+    /*public void setClients(Vector<Client> clients)
     {
         this.clients = clients;
-    }
-    public void stopit()
+    }*/
+    /*public void stopit()
     {
 
             stopsignal = true;
@@ -136,8 +196,8 @@ public class Server extends Thread {
 
 
 
-    }
-    public void closeit(){
+    }*/
+   /* public void closeit(){
         try {
             sslSocket.close();
             sslServerSocket.close();
@@ -146,6 +206,6 @@ public class Server extends Thread {
         {
             ;
         }
-    }
+    }*/
 
 }

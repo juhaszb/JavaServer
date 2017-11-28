@@ -25,7 +25,7 @@ public class Border {
      * >>> IMPORTANT!! <<<
      * DO NOT edit this method OR call it in your code!
      *
-     * @noinspection ALL
+     //* @noinspection ALL
      */
     private void $$$setupUI$$$() {
         createUIComponents();
@@ -38,7 +38,7 @@ public class Border {
     }
 
     /**
-     * @noinspection ALL
+    // * @noinspection ALL
      */
     public JComponent $$$getRootComponent$$$() {
         return panel1;

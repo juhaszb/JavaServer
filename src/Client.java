@@ -48,10 +48,11 @@ public class Client extends Thread {
     private volatile boolean stopsignal;
 
     /**
-     * Kliens sockete
+     * Konstruktor
      *  @param clientsocket
-     * Szerver példány
+     * Kliens sockete
      * @param s
+     * Szerver példány
      */
     public Client(SSLSocket clientsocket,Server s)
     {
@@ -111,12 +112,13 @@ public class Client extends Thread {
     }
 
     /**
-     * Felhasználónév
+     * Bejelentkezés függvény
      * @param username
-     * Jelszó
+     * Felhasználónév
      * @param password
-     * Sikeres volt-e a belépés
+     * Jelszó
      * @return
+     * Sikeres volt-e a belépés
      */
     public boolean tryLogin(String username,String password)
     {
@@ -190,6 +192,7 @@ public class Client extends Thread {
     /**
      * felhasználónevet adja vissza
      * @return
+     * felhasználónév
      */
     public String getUsername()
     {
@@ -199,6 +202,7 @@ public class Client extends Thread {
     /**
      * Volt-e új üzenet?
      * @return
+     * Volt -e új üzenet
      * @throws NullPointerException
      */
     public boolean newMessage() throws NullPointerException
@@ -229,8 +233,8 @@ public class Client extends Thread {
     }
 
     /**Elküldi az üzenetekt.
-     * Küldenivaló üzenet
      * @param message
+     * Küldenivaló üzenet
      */
     /*public void stopit()
     {
@@ -253,10 +257,10 @@ public class Client extends Thread {
     }
 
     /**Le hasheli a jelszót.
-     * Hashelendő jelszó
      * @param password
-     * A jelszó hashelt verziója
+     * Hashelendő jelszó
      * @return
+     * A jelszó hashelt verziója
      */
     public String hashing(String password)
     {

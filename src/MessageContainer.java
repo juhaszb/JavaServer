@@ -2,16 +2,37 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class MessageContainer implements Serializable{
+    /**
+     * A címzett felhasználóneve
+     */
     private String UsernameTo;
+    /**
+     * Küldő felhasználóneve
+     */
     private String UsernameFrom;
+    /**
+     * Üzenet
+     */
     private String message;
 
+    /**Konstruktor
+     * @param UF
+     * A küldő felhasználóneve
+     * @param UTO
+     * A címzett felhasználóneve
+     * @param msg
+     * üzenet
+     */
     public MessageContainer(String UF,String UTO,String msg)
     {
         UsernameFrom =UF;
         UsernameTo = UTO;
         message = msg;
     }
+
+    /**
+     * Szerializáció
+     */
     public void Serialize()
     {
         File f = new File(UsernameTo);
@@ -52,14 +73,26 @@ public class MessageContainer implements Serializable{
 
     }
 
+    /**Getter
+     * @return
+     * üzenet
+     */
     public String getMessage() {
         return message;
     }
 
+    /**Getter
+     * @return
+     * Küldő felhasználóneve
+     */
     public String getUsernameFrom() {
         return UsernameFrom;
     }
 
+    /**Getter
+     * @return
+     * Címzett felhasználóneve
+     */
     public String getUsernameTo() {
         return UsernameTo;
     }

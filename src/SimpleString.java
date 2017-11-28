@@ -7,9 +7,22 @@ import java.util.Vector;
 
 public class SimpleString extends Message {
 
-    private   Server s;
-    MessageContainer m ;
+    /**
+     * szerver obj.
+     */
+    private  Server s;
+    /**
+     * MessageContainer obj.
+     */
+    private MessageContainer m ;
+    /**
+     * megtalálva?
+     */
     private boolean found = false;
+
+    /**
+     * dekódolja az üzenetet.
+     */
     @Override
     public void decode() {
         Vector<Client> clients = s.getClients();
@@ -28,6 +41,17 @@ public class SimpleString extends Message {
 
 
     }
+
+    /**Alapvető konstruktor
+     * @param message
+     * üzenet
+     * @param to
+     * kinek felhasználónév
+     * @param from
+     * kitől felhasználónév
+     * @param s
+     * szerver objektum
+     */
     public SimpleString(String message,String to, String from,Server s)
     {
         super(message);
@@ -35,6 +59,13 @@ public class SimpleString extends Message {
         this.s = s;
 
     }
+
+    /**Konstruktor forradalma, második konstruktor
+     * @param m
+     * üzenetet tároló container
+     * @param s
+     * szerver objektum
+     */
     public SimpleString(MessageContainer m,Server s)
     {
         super(m.getMessage());

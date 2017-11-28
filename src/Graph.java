@@ -5,17 +5,33 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class Graph extends Thread{
+    /**
+     * Szervert objektum.
+     */
     //private Vector<Server> servers = new Vector<Server>();
-    Server s;
-    private boolean running = false;
+    private Server s;
+    /**
+     * JListhez kellő model
+     */
+    //private boolean running = false;
     private DefaultListModel model = new DefaultListModel();
+    /**
+     * Jlist
+     */
     private JList list = new JList();
 
+    /**Konstruktor
+     * @param s
+     * Szerver objektum.
+     */
     public Graph(Server s)
     {
         this.s = s;
     }
 
+    /**
+     * Thread futtatása
+     */
     @Override
     public void run() {
         Border b = new Border();
@@ -118,6 +134,11 @@ public class Graph extends Thread{
         updater.start();
 
     }
+
+    /**
+     * @param frame
+     * Regisztrációs ablak megjelenítése, adott framen
+     */
     private void Register(JFrame frame)
     {
         JPanel p = new JPanel(new BorderLayout(5,5));
@@ -145,6 +166,11 @@ public class Graph extends Thread{
         }
 
     }
+
+    /**Megváltoztatja a userfactory helyét.
+     * @param frame
+     * frame
+     */
     private void Changeto(JFrame frame)
     {
         Server.getuserfactory().changelocation(JOptionPane.showInputDialog("Name of the new list?"));

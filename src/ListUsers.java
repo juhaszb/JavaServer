@@ -3,10 +3,33 @@ import java.awt.*;
 import java.util.Vector;
 
 public class ListUsers extends Thread {
+    /**
+     * Szervereket tárolja.
+     */
     private Vector<Server> servers = new Vector<>();
-    DefaultListModel model;
-    JList list;
-    JFrame frame;
+    /**
+     * Model ami tárolja a listet
+     */
+    private DefaultListModel model;
+    /**
+     * Jlist
+     */
+    private JList list;
+    /**
+     * Egy frame
+     */
+    private JFrame frame;
+
+    /**Konstruktor
+     * @param servers
+     * Szervereket tároló vector
+     * @param model
+     * model
+     * @param list
+     * lista
+     * @param frame
+     * frame.
+     */
     public ListUsers(Vector<Server> servers, DefaultListModel model,JList list,JFrame frame)
     {
         this.servers = servers;
@@ -15,6 +38,9 @@ public class ListUsers extends Thread {
         this.frame = frame;
     }
 
+    /**
+     * szál futtatása
+     */
     @Override
     public void run() {
         model.removeAllElements();

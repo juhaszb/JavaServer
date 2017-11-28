@@ -5,14 +5,15 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class Graph extends Thread{
-    private Vector<Server> servers = new Vector<Server>();
+    //private Vector<Server> servers = new Vector<Server>();
+    Server s;
     private boolean running = false;
     private DefaultListModel model = new DefaultListModel();
     private JList list = new JList();
 
     public Graph(Server s)
     {
-        servers.add(s);
+        this.s = s;
     }
 
     @Override
@@ -46,28 +47,33 @@ public class Graph extends Thread{
         startszerver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                    servers.elementAt(0).setStart();
-                    servers.elementAt(0).start();
-
-
-
+                    if(!s.startready()) {
+                        s.setStart();
+                        s.start();
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null, "A szerver már fut!", "Error", JOptionPane.PLAIN_MESSAGE);
             }
         });
-        JMenuItem stopszerver = new JMenuItem("stop szerver");
-        stopszerver.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                servers.elementAt(0).stopit();
-            }
-        });
+
         New.add(NewUser);
         New.add(NewUserFile);
         menu.add(startszerver);
-        menu.add(stopszerver);
-       // model.addElement("sajt");
         list.setModel(model);
         JScrollPane pane = new JScrollPane(list);
+        JButton button = new JButton("Kick user");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(list.getSelectedValue());
+                Vector<Client> client = s.getClients();
+                for(int i = 0 ; i<client.size();i++)
+                    if(client.elementAt(i).getUsername().equals(list.getSelectedValue())) {
+                        s.removefromclients(i);
+                    }
+            }
+        });
+        frame.add(button,BorderLayout.SOUTH);
         frame.add(pane, BorderLayout.CENTER);
         frame.add(pane);
         frame.add(jmenubar,BorderLayout.NORTH);
@@ -79,19 +85,25 @@ public class Graph extends Thread{
             public void run() {
                 while(true)
                 {
-                    if((servers.size()-1 )>= 0) {
-                        Vector<Client> cl = servers.elementAt(servers.size()-1).getClients();
-                            for (int i = 0; i <cl.size(); i++) {
-                                if(i>=model.size())
-                                    model.add(i,cl.elementAt(i).getUsername());
-                                else if((String)model.getElementAt(i) !=cl.elementAt(i).getUsername() )
-                                {model.setElementAt(cl.elementAt(i).getUsername(),i);
-                                list.setModel(model);
-                                frame.add(pane);// replace thing if modified
-                                frame.invalidate();
-                                frame.validate();
-                                frame.repaint();}
+                        Vector<Client> cl = s.getClients();
+                        LogoutHandler handler = new LogoutHandler(cl);
+                        boolean changed = false;
+                        cl = handler.calculate();
+                            for(int i=0;i<cl.size();i++)
+                                if(model.size() == 0 || cl.size() != model.size() )
+                                    changed = true;
+                            if(cl.size()==0)
+                                changed = true;
+
+                            if(changed){
+                                model.removeAllElements();
+                                for(int i=0;i<cl.size();i++) {
+                                    model.addElement( cl.elementAt(i).getUsername());
+                                    changed = false;
+                                }
                             }
+
+
                             try{
                             Thread.sleep(500);
                             }
@@ -99,7 +111,7 @@ public class Graph extends Thread{
                             {
                                 ;
                             }
-                    }
+
                 }
             }
         };

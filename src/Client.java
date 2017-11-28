@@ -6,21 +6,63 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 
 public class Client extends Thread {
-    protected SSLSocket socket;
+    /**
+     * A kliens socket.
+     */
+    public SSLSocket socket;
+    /**
+     * Bejelentkezett -e a felhasználó
+     */
     protected boolean loggedin = false;
+    /**
+     * Üzenet.
+     */
     protected String message = null;
+    /**
+     * Felhasználónév
+     */
     protected String username;
+    /**
+     * InputStream a socket számára
+     */
     protected InputStream input = null;
+    /**
+     * BufferedReader, üzenetek fogadása
+     */
     protected BufferedReader br = null;
+    /**
+     * A kimeneti Stream socketeknél.
+     */
     protected DataOutputStream dout = null;
+    /**
+     * Szerver.
+     */
     protected Server s;
+    /**
+     * Leállt már a szerver.
+     */
+    protected  boolean ended = false;
+    /**
+     * Thread leállításárs való.
+     */
     private volatile boolean stopsignal;
+
+    /**
+     * Kliens sockete
+     *  @param clientsocket
+     * Szerver példány
+     * @param s
+     */
     public Client(SSLSocket clientsocket,Server s)
     {
         socket = clientsocket;
         stopsignal = false;
         this.s = s ;
     }
+
+    /**
+     * Threadet futtató függvény.
+     */
     public void run()
     {
 
@@ -54,6 +96,9 @@ public class Client extends Thread {
                 else {
                     System.out.println(line);
                 }
+                if(socket.isConnected() == false)
+                    ended = true;
+
 
             }
 
@@ -64,6 +109,15 @@ public class Client extends Thread {
         }
 
     }
+
+    /**
+     * Felhasználónév
+     * @param username
+     * Jelszó
+     * @param password
+     * Sikeres volt-e a belépés
+     * @return
+     */
     public boolean tryLogin(String username,String password)
     {
         try {
@@ -73,15 +127,7 @@ public class Client extends Thread {
             while((line = br.readLine())!= null)
             {
                 String[] split = line.split("\t");
-                MessageDigest m = MessageDigest.getInstance("MD5"); // MD5 hash generation
-                m.reset();
-                m.update(password.getBytes());
-                byte[] digest = m.digest();
-                BigInteger bigInt  = new BigInteger(1,digest);
-                String hash = bigInt.toString();
-                while(hash.length() < 32 ){
-                    hash = "0"+hash;
-                }
+                String hash = hashing(password);
                 System.out.println(split[1]+ " " +split[2]+ " "+ hash );
                 if(split[1].equals(username) && split[2].equals(hash)) {
                     String ok = "login_ok\n";
@@ -140,21 +186,36 @@ public class Client extends Thread {
         }
         return false;
     }
+
+    /**
+     * felhasználónevet adja vissza
+     * @return
+     */
     public String getUsername()
     {
         return username;
     }
-    public boolean newMessage()
+
+    /**
+     * Volt-e új üzenet?
+     * @return
+     * @throws NullPointerException
+     */
+    public boolean newMessage() throws NullPointerException
     {
         if(message.equals(null))
             return false;
         return true;
     }
-    public String getMessage()
+
+    /**
+     * Bezárja a streameket és socketokat.
+     */
+  /*  public String getMessage()
     {
         return message;
-    }
-    protected void closeall()
+    }*/
+    public void closeall()
     {
         try {
             br.close();
@@ -166,14 +227,19 @@ public class Client extends Thread {
             ;
         }
     }
-    public void stopit()
+
+    /**Elküldi az üzenetekt.
+     * Küldenivaló üzenet
+     * @param message
+     */
+    /*public void stopit()
     {
         stopsignal = true;
     }
     public boolean socketrunning()
     {
         return !socket.isClosed();
-    }
+    }*/
     public void send(String message)
     {
         try {
@@ -185,4 +251,35 @@ public class Client extends Thread {
             ;
         }
     }
+
+    /**Le hasheli a jelszót.
+     * Hashelendő jelszó
+     * @param password
+     * A jelszó hashelt verziója
+     * @return
+     */
+    public String hashing(String password)
+    {
+        String hash = null;
+        try {
+            MessageDigest m = MessageDigest.getInstance("MD5"); // MD5 hash generation
+            m.reset();
+            m.update(password.getBytes());
+            byte[] digest = m.digest();
+            BigInteger bigInt = new BigInteger(1, digest);
+             hash = bigInt.toString();
+            while (hash.length() < 32) {
+                hash = "0" + hash;
+            }
+        }
+        catch (Exception e)
+        {
+            ;
+        }
+        return hash;
+    }
+
+   /* public boolean isEnded() {
+        return ended;
+    }*/
 }

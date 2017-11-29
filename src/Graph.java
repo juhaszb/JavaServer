@@ -64,6 +64,7 @@ public class Graph extends Thread{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                     if(!s.startready()) {
+                        SetPort(s,frame);
                         s.setStart();
                         s.start();
                     }
@@ -115,11 +116,12 @@ public class Graph extends Thread{
                                 model.removeAllElements();
                                 for(int i=0;i<cl.size();i++) {
                                     model.addElement( cl.elementAt(i).getUsername());
+                                    list.setModel(model);
+                                    list.repaint();
+
+                                    }
                                     changed = false;
-                                }
                             }
-
-
                             try{
                             Thread.sleep(500);
                             }
@@ -127,7 +129,6 @@ public class Graph extends Thread{
                             {
                                 ;
                             }
-
                 }
             }
         };
@@ -162,9 +163,38 @@ public class Graph extends Thread{
         }
         catch(Exception e)
         {
-            ;
+
         }
 
+    }
+
+    /**Port beállítás
+     * @param s
+     * Szerver objektum
+     * @param frame
+     * Frame objektum
+     */
+    private void SetPort(Server s, JFrame frame)
+    {
+        JPanel p = new JPanel(new BorderLayout(5,5));
+        JPanel labels = new JPanel(new GridLayout(0,1,2,2));
+        labels.add(new JLabel("Port",SwingConstants.RIGHT));
+        p.add(labels,BorderLayout.WEST);
+        JPanel fields = new JPanel(new GridLayout(0,1,2,2));
+        JTextField port = new JTextField();
+        fields.add(port);
+        port.setText("1250");
+        p.add(fields,BorderLayout.CENTER);
+        JOptionPane.showMessageDialog(frame,p,"Port setting",JOptionPane.QUESTION_MESSAGE);
+
+       if(!port.getText().equals(""))
+       {
+           s.setPort(Integer.parseInt(port.getText()));
+       }
+       else
+       {
+           JOptionPane.showMessageDialog(null, "Nem lehet a port üres, használjuk az alapértelmezettet", "Error", JOptionPane.PLAIN_MESSAGE);
+       }
     }
 
     /**Megváltoztatja a userfactory helyét.

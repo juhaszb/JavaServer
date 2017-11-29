@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -30,20 +31,45 @@ public class Userfactory {
      */
     public void CreateUser(String email,String username,String password) throws IOException,NoSuchAlgorithmException
     {
-
-        PrintWriter pw = new PrintWriter(new FileOutputStream(new File(userlist),true));
-        System.out.println(password);
-        MessageDigest m = MessageDigest.getInstance("MD5"); // MD5 hash generation
-        m.reset();
-        m.update(password.getBytes());
-        byte[] digest = m.digest();
-        BigInteger bigInt  = new BigInteger(1,digest);
-        String hash = bigInt.toString();
-        while(hash.length() < 32 ){
-            hash = "0"+hash;
+        boolean errorwas = false;
+        if(email.equals("") || username.equals("") || password.equals("") )
+        {
+            JOptionPane.showMessageDialog(null, "Kérlek tölts ki minden mezőt.", "Error", JOptionPane.PLAIN_MESSAGE);
+            errorwas = true;
+            return;
         }
-        pw.println(username+"\t"+email+"\t"+hash);
-        pw.close();
+
+        FileReader fi = new FileReader(userlist);
+        BufferedReader br = new BufferedReader(fi);
+        String line;
+        while((line = br.readLine())!= null)
+        {
+            String[] split = line.split("\t");
+            if(split[0].equals(username))
+                errorwas = true;
+        }
+
+
+        br.close();
+        if(!errorwas) {
+            PrintWriter pw = new PrintWriter(new FileOutputStream(new File(userlist), true));
+            System.out.println(password);
+            MessageDigest m = MessageDigest.getInstance("MD5"); // MD5 hash generation
+            m.reset();
+            m.update(password.getBytes());
+            byte[] digest = m.digest();
+            BigInteger bigInt = new BigInteger(1, digest);
+            String hash = bigInt.toString();
+            while (hash.length() < 32) {
+                hash = "0" + hash;
+            }
+            pw.println(username + "\t" + email + "\t" + hash);
+            pw.close();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Már létezik ilyen felhasználó, próbáld újra", "Error", JOptionPane.PLAIN_MESSAGE);
+        }
 
     }
 

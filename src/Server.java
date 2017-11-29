@@ -184,6 +184,12 @@ public class Server extends Thread {
         clients.remove(index);
     }
 
+     public void setPort(int port)
+     {
+         if(!ready)
+             this.port = port;
+     }
+
     /*public void setClients(Vector<Client> clients)
     {
         this.clients = clients;
